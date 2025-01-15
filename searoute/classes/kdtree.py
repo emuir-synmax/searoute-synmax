@@ -2,6 +2,7 @@ class KDNode:
     """
     A KDNode
     """
+
     def __init__(self, point, left=None, right=None):
         self.point = point
         self.left = left
@@ -14,6 +15,7 @@ class KDTree:
 
 
     """
+
     def __init__(self, points=None):
         self.k = 2
         self.root = None
@@ -52,7 +54,7 @@ class KDTree:
         return KDNode(
             sorted_points[median],
             self._build_tree(sorted_points[:median], depth + 1),
-            self._build_tree(sorted_points[median + 1:], depth + 1),
+            self._build_tree(sorted_points[median + 1 :], depth + 1),
         )
 
     def _query(self, point, node, depth=0, best=None):
@@ -64,7 +66,6 @@ class KDTree:
 
         axis = depth % self.k
         next_best = None
-        next_branch = None
 
         if point[axis] < node.point[axis]:
             next_node = node.left
@@ -79,8 +80,7 @@ class KDTree:
             next_best = current_node.point
 
         if abs(point[axis] - node.point[axis]) < self._distance(point, next_best):
-            opposite_best = self._query(
-                point, opposite_node, depth + 1, next_best)
+            opposite_best = self._query(point, opposite_node, depth + 1, next_best)
             if self._distance(point, opposite_best) < self._distance(point, next_best):
                 next_best = opposite_best
 
@@ -88,11 +88,13 @@ class KDTree:
 
     def query(self, point):
         if point is None:
-            raise Exception('There is no nodes in the Graph')
+            raise Exception("There is no nodes in the Graph")
         try:
             best = self.root.point
-        except:
-            raise Exception('Ports/Marnet network was not initiated, initiate using searoute.utils.from_nodes_edges_set function')
+        except Exception:
+            raise Exception(
+                "Ports/Marnet network was not initiated, initiate using searoute.utils.from_nodes_edges_set function"
+            )
         return self._query(point, self.root, 0, best)
 
     def _distance(self, p1, p2):
